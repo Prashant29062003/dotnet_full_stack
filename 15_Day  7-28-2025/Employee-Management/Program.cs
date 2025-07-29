@@ -28,43 +28,36 @@ class EmployeeDAL
                 Console.WriteLine("Employee with this ID already exists.");
                 return false;
             }
-            else
-            {
-                employees.Add(e);
-            }
         }
+        employees.Add(e);
+        return true;
     }
 
     public bool DeleteEmployee(int id)
     {
-        foreach(Employee emp in employees){
-            if(emp.EmployeeId != id)
+        for(int i = employees.Count; i>=0;i--){
+            Employyee emp = (Employee)employees[i];
+            if(emp.EmployeeId == id)
             {
-                Console.WriteLine("Employee with this ID does not exist.");
-                return false;
-            }
-            else
-            {
-                employees.Remove(emp);
+                employees.Remove(i);
                 Console.WriteLine("Employee deleted successfully.");
                 return true;
             }
         }
+        Console.WriteLine("Employee with this ID does not exist.");
+        return false;
     }
 
     public string SearchEmployee(int id)
     {
         foreach(Employee emp in employees)
         {
-            if(emp.EmployeeId != id)
+            if(emp.EmployeeId == id)
             {
-                return null;
-            }
-            else
-            {
-                return $"{emp.EmployeeId}: {emp.EmployeeName}";
+                return emp.EmployeeName;
             }
         }
+        return null;
     }
     
     public Employee[] GetAllEmployees()
@@ -82,7 +75,17 @@ class Program
         // Adding employees
         employeeDAL.AddEmployee(new Employee("Alice", 1, 50000));
         employeeDAL.AddEmployee(new Employee("Bob", 2, 60000));
-        
+
+        // Displaying all employees
+        foreach(var emp in employeeDAL.GetAllEmployees())
+        {
+            Console.WriteLine($"{emp.EmployeeId}: {emp.EmployeeName}, Salary: {emp.Salary}");
+        }
+
+        Console.WriteLine("-----");
+
+
+
         // Searching for an employee
         string searchResult = employeeDAL.SearchEmployee(1);
         if (searchResult != null)
@@ -104,5 +107,6 @@ class Program
         {
             Console.WriteLine($"{emp.EmployeeId}: {emp.EmployeeName}, Salary: {emp.Salary}");
         }
+        Console.ReadLine();
     }
 }
